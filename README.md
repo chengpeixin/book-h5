@@ -1,6 +1,6 @@
-# xpc
+# 书城项目，这部分为前端
 
-> A Vue.js project
+> 使用vue创建
 
 ## Build Setup
 
