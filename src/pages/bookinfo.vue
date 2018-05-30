@@ -1,9 +1,9 @@
 <template>
   <div>
     <mt-header :title="title" :class="$style.header">
-      <router-link to="/" slot="left">
+      <a slot="left" v-touch:tap="back">
         <mt-button icon="back">返回</mt-button>
-      </router-link>
+      </a>
     </mt-header>
     <div id="wrapper" :class="$style.wrapper">
       <div class="content">
@@ -53,6 +53,9 @@ export default {
     this.getbookinfo()
   },
   methods: {
+    back () {
+      history.back()
+    },
     async initscroll () {
       // 初始化scrol
       this.scroll = new this.$Bscroll(document.getElementById('wrapper'))
@@ -74,13 +77,38 @@ export default {
       console.log(data)
     },
     async startreading () {
-      console.log('开始阅读')
-      console.log(this.bookid)
+      this.$router.push({
+        path: '/lookbook',
+        query: { book: this.bookid, chapterid: 1 }
+      })
+      let {
+        data
+      } = await this.$http.post(
+        `http://xinpeicheng.com:8082/api/getChaptertext`,
+        {
+          id: this.bookid,
+          // 开始阅读，一开始定死为1
+          chapterid: 1
+        }
+      )
+      console.log(data)
     },
     readingNum (data) {
       return () => {
-        // console.log('')
-      }
+        this.$router.push({
+          path: '/lookbook',
+          query: { book: this.bookid, chapterid: data.chapterid }
+        })
+        this.$http
+          .post(`http://xinpeicheng.com:8082/api/getChaptertext`, {
+            id: this.bookid,
+            // 开始阅读，一开始定死为1
+            chapterid: data.chapterid
+          })
+          .then(res => {
+            console.log(res)
+          })
+      };
     }
   }
 }
