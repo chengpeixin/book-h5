@@ -4,14 +4,15 @@
       <img :class="$style.loadingimg" src="@/assets/loading-book.gif">
       <p :class="$style.loadingtext">正在为您加载，请耐心等等</p>
     </Loding>
-    <div v-bind:class="{day:pattern}">
-      <p :class="$style.title">{{title}}</p>
-      <div v-html="text" :class="$style.content">
-      </div>
-      <div :class="$style.operation">
-        <div>上一章</div>
-        <div>设置</div>
-        <div>下一章</div>
+    <div id="wrapper" :class="$style.wrapper">
+      <div class="content">
+        <div v-bind:class="{day:pattern}">
+          <p :class="$style.title" @click="show = !show">{{title}}</p>
+          <transition name="fade">
+            <div v-html="text" :class="$style.content" v-if="show"></div>
+          </transition>
+        </div>
+        <Chapteroperation @operation='operation' @setup="setup" @next="next"></Chapteroperation>
       </div>
     </div>
   </div>
@@ -19,6 +20,7 @@
 
 <script>
 import Loding from '@/components/common/loding';
+import Chapteroperation from '@/components/lockbook/chapteroperation';
 export default {
   data () {
     return {
@@ -27,7 +29,9 @@ export default {
       chapterid: this.$route.query.chapterid,
       text: '',
       title: '',
-      pattern: true
+      pattern: true,
+      show: true,
+      scroll: ''
     }
   },
   created () {
@@ -54,20 +58,58 @@ export default {
               .datas[i]}</p>`
           }
         })
+    },
+    async initscroll () {
+      // 初始化scrol
+      this.scroll = new this.$Bscroll(document.getElementById('wrapper'))
+
+      this.scroll.on('scroll', pos => {})
+    },
+    operation (status) {
+      console.log(status)
+    },
+    setup (status) {
+      console.log(status)
+    },
+    next (status) {
+      this.$router.replace({
+        path: '/lookbook',
+        query: { book: this.$route.book, chapterid: this.$route.chapterid++ }
+      })
+
+      console.log(status)
     }
   },
+  mounted () {
+    this.initscroll()
+  },
   components: {
-    Loding
+    Loding,
+    Chapteroperation
   }
 }
 </script>
 <style>
 .day {
-  background: #fec;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
 
 <style lang="stylus" module>
+.wrapper {
+  width: 100%;
+  height: 667px;
+  background: #fec;
+}
+
 .title {
   height: 40px;
   padding: 10px 10px 0px 10px;
@@ -94,29 +136,5 @@ export default {
 
 .content {
   padding: 10px 8px 0px 8px;
-}
-
-.operation {
-  width: 100%;
-  height: 40px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-
-  div {
-    width: 33.333%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #363636;
-    color: #AFB0BA;
-  }
-
-  div:nth-child(2) {
-    font-size: 12px;
-  }
 }
 </style>

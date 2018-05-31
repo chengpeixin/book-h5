@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'element-ui/lib/theme-chalk/index.css'
 import Cookie from 'js-cookie'
 import axios from 'axios'
 import MD5 from 'blueimp-md5'
