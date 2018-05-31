@@ -7,10 +7,8 @@
     <div id="wrapper" :class="$style.wrapper">
       <div class="content">
         <div v-bind:class="{day:pattern}">
-          <p :class="$style.title" @click="show = !show">{{title}}</p>
-          <transition name="fade">
-            <div v-html="text" :class="$style.content" v-if="show"></div>
-          </transition>
+          <p :class="$style.title">{{title}}</p>
+          <div v-html="text" :class="$style.content"></div>
         </div>
         <Chapteroperation @operation='operation' @setup="setup" @next="next"></Chapteroperation>
       </div>
@@ -72,12 +70,13 @@ export default {
       console.log(status)
     },
     next (status) {
-      this.$router.replace({
+      this.chapterid += 1
+      this.$router.push({
         path: '/lookbook',
-        query: { book: this.$route.book, chapterid: this.$route.chapterid++ }
+        query: { book: this.bookid, chapterid: this.chapterid }
       })
 
-      console.log(status)
+      console.log(this.bookid, this.chapterid)
     }
   },
   mounted () {
@@ -92,7 +91,7 @@ export default {
 <style>
 .day {
 }
-.fade-enter-active,
+/* .fade-enter-active,
 .fade-leave-active {
   transition: opacity 1s;
 }
@@ -100,7 +99,7 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-}
+} */
 </style>
 
 <style lang="stylus" module>

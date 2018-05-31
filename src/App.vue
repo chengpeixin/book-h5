@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <keep-alive>
+    <transition name="fade">
       <router-view/>
-    </keep-alive>
+    </transition>
+
   </div>
 </template>
 
@@ -13,6 +14,15 @@ export default {
 </script>
 
 <style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

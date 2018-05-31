@@ -1,5 +1,8 @@
 <template>
   <div>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
     <Booklist></Booklist>
     <!-- <Footer></Footer> -->
   </div>

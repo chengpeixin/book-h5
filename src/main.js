@@ -11,7 +11,7 @@ import './../static/reset.css'
 import touch from 'vue-directive-touch'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
-
+import Xheader from './components/common/xheader'
 router.beforeEach((to, from, next) => {
   if (to.meta.Auth) {
     const user = Cookie.get('user')
@@ -34,7 +34,7 @@ Vue.prototype.$Cookie = Cookie
 Vue.prototype.$http = axios
 Vue.prototype.$md5 = MD5
 Vue.prototype.$Bscroll = BScroll
-// Vue.component(Header.name, Header)
+Vue.component('xheader', Xheader)
 
 /* eslint-disable no-new */
 new Vue({

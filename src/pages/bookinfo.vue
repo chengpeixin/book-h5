@@ -1,10 +1,6 @@
 <template>
   <div>
-    <mt-header :title="title" :class="$style.header">
-      <a slot="left" v-touch:tap="back">
-        <mt-button icon="back">返回</mt-button>
-      </a>
-    </mt-header>
+    <xheader :title="title"></xheader>
     <div id="wrapper" :class="$style.wrapper">
       <div class="content">
         <div :class="$style.bookfull">
@@ -35,52 +31,49 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      title: '',
-      bookSrc: '',
-      author: '',
-      summery: '',
+      title: "",
+      bookSrc: "",
+      author: "",
+      summery: "",
       chapters: [],
       bookid: this.$route.query.book,
-      scroll: ''
-    }
+      scroll: ""
+    };
   },
-  mounted () {
-    this.initscroll()
+  mounted() {
+    this.initscroll();
   },
-  created () {
-    this.getbookinfo()
+  created() {
+    this.getbookinfo();
   },
   methods: {
-    back () {
-      history.back()
-    },
-    async initscroll () {
+    async initscroll() {
       // 初始化scrol
-      this.scroll = new this.$Bscroll(document.getElementById('wrapper'))
+      this.scroll = new this.$Bscroll(document.getElementById("wrapper"));
 
-      this.scroll.on('scroll', pos => {})
+      this.scroll.on("scroll", pos => {});
     },
-    async getbookinfo () {
+    async getbookinfo() {
       let {
         data
       } = await this.$http.post(`http://xinpeicheng.com:8082/api/getBook`, {
         id: this.bookid
-      })
-      data = data.data
-      this.title = data.bookName
-      this.bookSrc = data.img
-      this.author = data.author
-      this.summery = data.summery
-      this.chapters = data.chapter
-      console.log(data)
+      });
+      data = data.data;
+      this.title = data.bookName;
+      this.bookSrc = data.img;
+      this.author = data.author;
+      this.summery = data.summery;
+      this.chapters = data.chapter;
+      console.log(data);
     },
-    async startreading () {
+    async startreading() {
       this.$router.push({
-        path: '/lookbook',
+        path: "/lookbook",
         query: { book: this.bookid, chapterid: 1 }
-      })
+      });
       let {
         data
       } = await this.$http.post(
@@ -90,15 +83,15 @@ export default {
           // 开始阅读，一开始定死为1
           chapterid: 1
         }
-      )
-      console.log(data)
+      );
+      console.log(data);
     },
-    readingNum (data) {
+    readingNum(data) {
       return () => {
         this.$router.push({
-          path: '/lookbook',
+          path: "/lookbook",
           query: { book: this.bookid, chapterid: data.chapterid }
-        })
+        });
         this.$http
           .post(`http://xinpeicheng.com:8082/api/getChaptertext`, {
             id: this.bookid,
@@ -106,23 +99,15 @@ export default {
             chapterid: data.chapterid
           })
           .then(res => {
-            console.log(res)
-          })
+            console.log(res);
+          });
       };
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" module>
-.header {
-  height: 45px;
-  background: #fff;
-  color: #5b5b5b;
-  z-index: 2;
-  border-bottom: 1px solid #f1f1f1;
-}
-
 .wrapper {
   height: 622px;
   width: 100%;
